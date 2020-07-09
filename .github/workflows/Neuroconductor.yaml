@@ -137,7 +137,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
           asset_path: ${{ github.workspace }}/check/${{ steps.set_env_variables.outputs.PKG_NAME }}_${{ steps.set_env_variables.outputs.PKG_VER }}_R_x86_64-pc-linux-gnu.tar.gz
           asset_name: ${{ steps.set_env_variables.outputs.PKG_NAME }}_${{ steps.set_env_variables.outputs.outputs.PKG_VER }}_R_x86_64-pc-linux-gnu_R${{ matrix.config.r_ver }}.tar.gz
           asset_content_type: application/octet-stream
