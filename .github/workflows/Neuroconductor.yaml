@@ -94,21 +94,21 @@ jobs:
       - name: Before Check
         run: Rscript -e "tic::before_install()"
         
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.get_version.outputs.PKG_VER }}
-          release_name: Release v$${{ steps.get_version.outputs.PKG_VER }}
-          draft: false
-          prerelease: false
+#      - name: Create Release
+#        id: create_release
+#        uses: actions/create-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          tag_name: ${{ steps.get_version.outputs.PKG_VER }}
+#          release_name: Release v${{ steps.get_version.outputs.PKG_VER }}
+#          draft: false
+#          prerelease: false
 
       - name: "Check"
         run: | 
           Rscript -e 'tic::script()'
-          ls -l /home/runner/work/cfma/cfma/
+          ls -l ${{ runner.temp }}
         shell: bash
         
       - name: Show testthat output
