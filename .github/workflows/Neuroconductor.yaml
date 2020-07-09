@@ -20,7 +20,7 @@ jobs:
         id: get_variables
         run: |
           echo ::set-output name=PKG_NAME::$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//")
-          echo ::set-output name=PKG_VER::$(Rscript -e 'cat(read.dcf("DESCRIPTION")[, "Version"])')
+#          echo ::set-output name=PKG_VER::$(Rscript -e 'cat(read.dcf("DESCRIPTION")[, "Version"])')
         shell: bash
       
   create_release:
@@ -36,8 +36,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.get_variables.outputs.PKG_VER }} 
-          release_name: Neuroc Release v${{ steps.get_variables.outputs.PKG_VER }}
+          tag_name: ${{ needs.get_variables.outputs.PKG_NAME }} 
+          release_name: Neuroc Release v${{ needs.get_variables.outputs.PKG_NAME }}
           draft: false
           prerelease: false
   
