@@ -30,14 +30,15 @@ jobs:
       upload_url: ${{ steps.create_release.outputs.upload_url }} 
     steps:
       - name: Create release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.get_variables.outputs.PKG_VER }} 
-        release_name: Neuroc Release v${{ steps.get_variables.outputs.PKG_VER }}
-        draft: false
-        prerelease: false
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get_variables.outputs.PKG_VER }} 
+          release_name: Neuroc Release v${{ steps.get_variables.outputs.PKG_VER }}
+          draft: false
+          prerelease: false
   
   neuroconductor_check:
     needs: create_release
