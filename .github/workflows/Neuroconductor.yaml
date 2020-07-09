@@ -113,7 +113,7 @@ jobs:
       - name: "Check"
         run: | 
           Rscript -e 'tic::script()'
-          ls -l
+          ls -l check
         shell: bash
         
       - name: Show testthat output
