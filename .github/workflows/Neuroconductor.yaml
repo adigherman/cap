@@ -67,7 +67,6 @@ jobs:
         id: set_env_variables
         run: |
           echo ::set-output name=PKG_NAME::$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//")
-          echo ::set-output name=PKG_VER::$(Rscript -e 'cat(read.dcf("DESCRIPTION")[, "Version"])')
         shell: bash
       
       - name: Query dependencies
@@ -139,8 +138,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/check/${{ steps.set_env_variables.outputs.PKG_NAME }}_${{ steps.set_env_variables.outputs.PKG_VER }}_R_x86_64-pc-linux-gnu.tar.gz
-          asset_name: ${{ steps.set_env_variables.outputs.PKG_NAME }}_${{ steps.set_env_variables.outputs.PKG_VER }}_R_x86_64-pc-linux-gnu_R${{ matrix.config.r_ver }}.tar.gz
+          asset_path: ${{ github.workspace }}/check/${{ steps.set_env_variables.outputs.PKG_NAME }}_${{ needs.get_tag_name.outputs.VERSION }}_R_x86_64-pc-linux-gnu.tar.gz
+          asset_name: ${{ steps.set_env_variables.outputs.PKG_NAME }}_${{ needs.get_tag_name.outputs.VERSION }}_R_x86_64-pc-linux-gnu_R${{ matrix.config.r_ver }}.tar.gz
           asset_content_type: application/octet-stream
 
       - name: Deploy
