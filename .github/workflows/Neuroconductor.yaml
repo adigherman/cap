@@ -109,9 +109,8 @@ jobs:
         run: | 
           Rscript -e 'tic::script()'
           ls -l ${{ runner.temp }}
-          ls -l ${{ github.workspace }}
-          updatedb
-          locate cap_1.0.tar.gz
+          ls -l ${{ github.workspace }}/_github_workflow
+          ls -l ${{ github.workspace }}/Library
         shell: bash
         
       - name: Show testthat output
