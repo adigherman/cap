@@ -35,7 +35,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{github.event.pull_request.head.repo.full_name}} 
+          tag_name: ${{ github.event.pull_request.head.repo.full_name }} 
           release_name: Neuroc Release ${{github.event.pull_request.head.repo.full_name}}
           draft: false
           prerelease: false
