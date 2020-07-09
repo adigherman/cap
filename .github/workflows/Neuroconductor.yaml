@@ -9,17 +9,46 @@ on:
 name: Neuroconductor-check
 
 jobs:
-  Neuroconductor-check:
+  get_variables:
+    name: Get variables
+    outputs:
+      pkg_name: ${{ steps.get_variables.PKG_NAME }}
+      pkg_version: ${{ steps.get_variables.PKG_VER }}
+    steps:
+      - name: Get the repo name and version
+        id: get_version
+        run: |
+          echo ::set-output name=PKG_NAME::$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//")
+          echo ::set-output name=PKG_VER::$(Rscript -e 'cat(read.dcf("DESCRIPTION")[, "Version"])')
+        shell: bash
+      
+  create_release:
+    name: Create release
+    needs: get_variables
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }} 
+    steps:
+      - name: Create release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.get_variables.outputs.PKG_VER }} 
+        release_name: Neuroc Release v${{ steps.get_variables.outputs.PKG_VER }}
+        draft: false
+        prerelease: false
+  
+  neuroconductor_check:
+    needs: create_release
     runs-on: ${{ matrix.config.os }}
-
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
-
     strategy:
       fail-fast: false
       matrix:
         config:
-          - {os: macOS-latest,   r: 'release', latex: "true"}
-          - {os: windows-latest, r: 'release'}
+#          - {os: macOS-latest,   r: 'release', latex: "true"}
+#          - {os: windows-latest, r: 'release'}
           - {os: ubuntu-16.04,   r: 'release', r_ver: '4.0', latex: "true", rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -46,12 +75,7 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@master
       
-      - name: Get the repo name
-        id: get_version
-        run: |
-          echo ::set-output name=REPO_NAME::$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//")
-          echo ::set-output name=PKG_VER::$(Rscript -e 'cat(read.dcf("DESCRIPTION")[, "Version"])')
-        shell: bash
+
       
       - name: Query dependencies
         run: |
@@ -93,18 +117,7 @@ jobs:
         
       - name: Before Check
         run: Rscript -e "tic::before_install()"
-        
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.get_version.outputs.PKG_VER }} 
-          release_name: Release v${{ steps.get_version.outputs.PKG_VER }} ( ${{ github.event.head_commit.message }})
-          draft: false
-          prerelease: false
-
+      
       - name: "Check"
         run: | 
           Rscript -e 'tic::script()'
@@ -132,8 +145,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/check/${{ steps.get_version.outputs.REPO_NAME }}_${{ steps.get_version.outputs.PKG_VER }}_R_x86_64-pc-linux-gnu.tar.gz
-          asset_name: ${{ steps.get_version.outputs.REPO_NAME }}_${{ steps.get_version.outputs.PKG_VER }}_RR_x86_64-pc-linux-gnu_R${{ matrix.config.r_ver }}.tar.gz
+          asset_path: ${{ github.workspace }}/check/${{ needs.get_variables.outputs.REPO_NAME }}_${{ needs.get_variables.outputs.PKG_VER }}_R_x86_64-pc-linux-gnu.tar.gz
+          asset_name: ${{ needs.get_variables.outputs.REPO_NAME }}_${{ needs.get_variables.outputs.PKG_VER }}_R_x86_64-pc-linux-gnu_R${{ matrix.config.r_ver }}.tar.gz
           asset_content_type: application/octet-stream
 
       - name: Deploy

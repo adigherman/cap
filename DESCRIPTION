@@ -1,7 +1,7 @@
 Package: cap
 Type: Package
 Title: Covariate Assisted Principal (CAP) Regression for Covariance Matrix Outcomes
-Version: 1.0.1
+Version: 1.0.2
 Date: 2018-09-07
 Author: Yi Zhao <zhaoyi1026@gmail.com>, 
 		Bingkai Wang <bwang51@jhmi.edu>, 
