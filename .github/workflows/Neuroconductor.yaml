@@ -132,7 +132,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/check/${{ steps.get_version.outputs.REPO_NAME }}_${{ steps.get_version.outputs.PKG_VER }}_RR_x86_64-pc-linux-gnu.tar.gz
+          asset_path: ${{ github.workspace }}/check/${{ steps.get_version.outputs.REPO_NAME }}_${{ steps.get_version.outputs.PKG_VER }}_R_x86_64-pc-linux-gnu.tar.gz
           asset_name: ${{ steps.get_version.outputs.REPO_NAME }}_${{ steps.get_version.outputs.PKG_VER }}_RR_x86_64-pc-linux-gnu_R${{ matrix.config.r_ver }}.tar.gz
           asset_content_type: application/octet-stream
 
