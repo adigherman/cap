@@ -108,9 +108,7 @@ jobs:
       - name: "Check"
         run: | 
           Rscript -e 'tic::script()'
-          ls -l ${{ runner.temp }}/_github_workflow
-          ls -l ${{ runner.temp }}/Library
-          ls -l ${{ github.workspace }}
+          ls -l ${{ github.workspace }}/check
         shell: bash
         
       - name: Show testthat output

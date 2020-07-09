@@ -1,0 +1,6 @@
+cap-package             Covariate Assisted Principal (CAP) Regression
+                        for Covariance Matrix Outcomes
+capReg                  Covariate Assisted Principal Regression for
+                        Covariance Matrix Outcomes
+cap_beta                Inference of model coefficients
+env.example             Simulated data
