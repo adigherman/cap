@@ -64,7 +64,7 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@master
       
       - name: Hello world
-        run: echo Name=${{ github.repository.name }}
+        run: echo Name=${{ github.repository }}
       
       - name: Get the repo name and version
         if: runner.os != 'Windows'
