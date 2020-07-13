@@ -73,14 +73,14 @@ jobs:
         if: runner.os == 'Windows'
         id: get_pkg_version_win
         run: |
-          echo ::set-output name=PKG_VER::$(Rscript.exe -e "cat(read.dcf('DESCRIPTION')[, 'Version'])"")
+          echo ::set-output name=PKG_VER::$(Rscript.exe -e "cat(read.dcf('DESCRIPTION')[, 'Version'])")
         shell: bash
         
       - name: Get the repo version (macOS/ubuntu)
         if: runner.os != 'Windows'
         id: get_pkg_version_nonwin
         run: |
-          echo ::set-output name=PKG_VER::$(Rscript -e "cat(read.dcf('DESCRIPTION')[, 'Version'])"")
+          echo ::set-output name=PKG_VER::$(Rscript -e 'cat(read.dcf("DESCRIPTION")[, "Version"])')
         shell: bash
       
       - name: Query dependencies
